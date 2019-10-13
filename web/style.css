@@ -1,3 +1,11 @@
-#add {
-    float: right;
+body {
+    text-align: center;
+}
+#query {
+    display: block;
+    width: 400px;
+    margin: auto;
+}
+#buttons {
+    margin: auto;
 }
