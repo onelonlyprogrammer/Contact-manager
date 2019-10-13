@@ -3,12 +3,14 @@ function init() {
     str = document.getElementById("query").value;
     output = document.getElementById("output");
 }
+//Takes name of contact and returns contents if found
 function find() {
     init();
     eel.findContact(str)(function(ret) {
         output.innerHTML = ret;
     });
 }
+//Takes name of contact and if found removes contact
 function remove() {
     init();
     args = str.split(", ");
@@ -16,6 +18,7 @@ function remove() {
     	output.innerHTML = ret;
     });
 }
+//Takes four arguments and sends them to addContact
 function add() {
     init();
     args = str.split(", ");
