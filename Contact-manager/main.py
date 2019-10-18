@@ -1,6 +1,10 @@
 import eel
+import crypt
 FILENAME ="contacts.txt"
 contactList = {}
+
+#Encodeing object
+cipher = crypt.AESCipher("Key")
 
 #Contact class
 class contact:
@@ -23,19 +27,22 @@ class contact:
 
 #Writes contacts to file in proper format
 def writeToFile(contacts):
-    with open(FILENAME, "w") as file:
+    with open(FILENAME, "wb") as file:
         for x, y in contacts.items():
-            file.write(str(y) + "\n")
+            print(y)
+            file.write(cipher.encrypt(str(y)))
+            file.write("\n".encode("utf-8"))
 
 #Reads contacts and append them to contactList
 def readFromFile():
     global contactList
     ret = {}
-    with open(FILENAME, "r") as file:
+    with open(FILENAME, "rb") as file:
         for f in file:
-            f = f.strip("\n").split(", ")
-            p = contact(f[0], f[1], f[2], f[3])
-            contactList[p.name] = p
+            if f != "\n":
+                f = str(cipher.decrypt(f)).strip("b").strip("'").split(", ")
+                p = contact(f[0], f[1], f[2], f[3])
+                contactList[p.name] = p
 
 @eel.expose
 def findContact(s):
@@ -69,7 +76,7 @@ try:
     readFromFile()
 except FileNotFoundError:
     print("creating " + FILENAME)
-    with open(FILENAME, "w"):
+    with open(FILENAME, "wb"):
         pass
 
 eel.init("web")
