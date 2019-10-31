@@ -1,6 +1,6 @@
 import eel
 import crypt
-FILENAME ="contacts.txt"
+FILENAME = "contacts.txt"
 contactList = {}
 
 #Encodeing object
@@ -15,7 +15,7 @@ class contact:
 
     def formatString(self): 
         return self.name + ", " + self.phone + ", " + self.email + ", " + self.address
-    
+
     def __init__(self, name, phone, email, address):
         self.name = name
         self.phone = phone
@@ -29,45 +29,47 @@ class contact:
 def writeToFile(contacts):
     with open(FILENAME, "wb") as file:
         for x, y in contacts.items():
-            print(y)
             file.write(cipher.encrypt(str(y)))
             file.write("\n".encode("utf-8"))
 
 #Reads contacts and append them to contactList
 def readFromFile():
     global contactList
-    ret = {}
     with open(FILENAME, "rb") as file:
         for f in file:
-            if f != "\n":
-                f = str(cipher.decrypt(f)).strip("b").strip("'").split(", ")
-                p = contact(f[0], f[1], f[2], f[3])
-                contactList[p.name] = p
+            f = str(cipher.decrypt(f)).strip("b").strip("'").split(", ")
+            p = contact(f[0], f[1], f[2], f[3])
+            contactList[p.name] = p
 
 @eel.expose
-def findContact(s):
-    if s.upper() == "ALL":
+#Takes string and returns contact if found
+def findContact(query):
+    ret = []
+    if query.upper() == "ALL":
         for x, y in contactList.items():
-            print(y)
-    elif s in contactList:
-        return contactList[s].formatString()
+            ret.append(y.formatString())
+    elif query in contactList:
+        ret.append(contactList[query].formatString())
     else:
-       return "Could not find " + s
+       ret.append("Could not find " + query)
+    return ret
 
 @eel.expose
-def addContact(key, phone, email, address): 
-    if key.upper() == "ALL":
-        print("All is not a valid name")
-        return
-    p = contact(key, phone, email, address)
-    contactList[key] = p
+#Takes list of four arguments, turns them into contact object and appends contact to contact List
+def addContact(con):
+    if len(con) != 4:
+        return "Invalid contact. Please input four items"
+    if con[0].upper == "ALL":
+        return "All is not a valid name"
+    contactList[con[0]] = contact(con[0], con[1], con[2], con[3])
     writeToFile(contactList)
+    return con[0] + " successfully added"
 
 @eel.expose
+#Takes string and searches for matching string and deletes corresponding contact
 def deleteContact(todelete):
     if todelete in contactList:
-        contactList.pop(todelete)
-        writeToFile(contactList)
+        writeToFile(contactList.pop(todelete))
         return todelete + " succesfully deleted"
     else:
         return "Could not find " + todelete
@@ -80,5 +82,5 @@ except FileNotFoundError:
         pass
 
 eel.init("web")
-eel.start("index.html")
-
+#For starting eel
+#eel.start("index.html")
