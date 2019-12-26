@@ -83,4 +83,4 @@ except FileNotFoundError:
 
 eel.init("web")
 #For starting eel
-#eel.start("index.html")
+"""Comment wnen using gui.py"""#eel.start("index.html")
