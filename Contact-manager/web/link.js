@@ -6,8 +6,11 @@ function init() {
 //Takes name of contact and returns contents if found
 function find() {
     init();
+    output.innerHTML = "";
     eel.findContact(str)(function(ret) {
-        output.innerHTML = ret;
+        for (var i = 0; i < ret.length; i++) {
+            output.innerHTML += `${ret[i]} <hr>`;
+        }
     });
 }
 //Takes name of contact and if found removes contact
