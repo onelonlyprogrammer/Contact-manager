@@ -13,9 +13,6 @@ class contact:
     email = "undefined"
     address = "undefined"
 
-    def formatString(self): 
-        return self.name + ", " + self.phone + ", " + self.email + ", " + self.address
-
     def __init__(self, name, phone, email, address):
         self.name = name
         self.phone = phone
@@ -47,9 +44,9 @@ def findContact(query):
     ret = []
     if query.upper() == "ALL":
         for x, y in contactList.items():
-            ret.append(y.formatString())
+            ret.append(str(y))
     elif query in contactList:
-        ret.append(contactList[query].formatString())
+        ret.append(str(contactList[query]))
     else:
        ret.append("Could not find " + query)
     return ret
@@ -83,4 +80,4 @@ except FileNotFoundError:
 
 eel.init("web")
 #For starting eel
-"""Comment wnen using gui.py"""#eel.start("index.html")
+#eel.start("index.html")
